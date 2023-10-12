@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract NFTFractionalization is Ownable {
+contract NFTFractionalization {
     struct Listing {
         address seller;
         uint256 tokenId;
@@ -16,7 +16,7 @@ contract NFTFractionalization is Ownable {
     }
 
     mapping(uint256 => Listing) public listings;
-    uint256 public nextListingId = 1;
+    uint256 public listingId = 1;
     uint256 public platformFee = 10; // 0.1%
 
     IERC20 public paymentToken;
@@ -34,7 +34,7 @@ contract NFTFractionalization is Ownable {
 
         nft.safeTransferFrom(msg.sender, address(this), _tokenId);
 
-        listings[nextListingId] = Listing({
+        listings[listingId] = Listing({
             seller: msg.sender,
             tokenId: _tokenId,
             price: _price,
@@ -42,7 +42,7 @@ contract NFTFractionalization is Ownable {
             soldShares: 0
         });
 
-        nextListingId++;
+        listingId++;
     }
 
     function buyShares(uint256 _listingId, uint256 _shares) external {
@@ -54,7 +54,7 @@ contract NFTFractionalization is Ownable {
         paymentToken.transferFrom(msg.sender, address(this), totalPrice);
 
         uint256 platformFeeAmount = totalPrice * platformFee / 10000;
-        paymentToken.transfer(owner(), platformFeeAmount);
+        paymentToken.transfer(address(this), platformFeeAmount); 
 
         uint256 sellerAmount = totalPrice - platformFeeAmount;
         paymentToken.transfer(listing.seller, sellerAmount);

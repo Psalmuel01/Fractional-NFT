@@ -7,7 +7,7 @@ Create a  platform that enables users to tokenize and list their NFT assets, all
 
 Features:
 
-purchase amount should the sent user and platform get 0.1 % of all amount accumulated from sales.
+purchase amount should be sent to user and platform get 0.1 % of all amount accumulated from sales.
 
 fractions purchase can be transferred to another user
 
